@@ -1,0 +1,67 @@
+class SpaceShip
+{
+    field int x,y;
+    field int loc;
+    constructor SpaceShip new(int Ax,int Ay)
+    {
+        let x = Ax;
+        let y = Ay;
+        let loc = ((x * 32) + y);
+        return this;
+    }
+
+    method void draw()
+    {
+        do Graphics.draw_ship(loc);
+        return;
+    }
+
+    method void clear()
+    {
+        do Graphics.clear_ship(loc);
+        return;
+    }
+
+    method void move_left()
+    {
+        let y = y-1;
+        if(y < 0)
+        {
+            let y = 0;
+            return;
+        }
+        do clear();
+        
+        let loc = ((x * 32) + y);
+
+        do draw();
+        return;
+    }
+
+    method void move_right()
+    {
+        let y = y+1;
+        if(y > 31)
+        {
+            let y = 31;
+            return;
+        }
+        do clear();
+        
+        let loc = ((x * 32) + y);
+
+        do draw();
+        return;
+    }
+
+    method int return_y()
+    {
+        return y;
+    }
+
+    method int return_x()
+    {
+        return x;
+    }
+
+}

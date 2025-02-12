@@ -1,0 +1,43 @@
+class Main
+{
+    function void main()
+    {
+        var SpaceShip c;
+        var int k;
+
+        var int x_ammo,y_ammo;
+        var FireArm f;
+
+        let c = SpaceShip.new(239,24);
+
+        let f = FireArm.new(5);
+
+        //do Screen.drawLine(128,0,128,256);
+        do c.draw();
+        while(true)
+        {
+            
+            let k = Keyboard.keyPressed();
+            if(k = 130)
+            {
+                do c.move_left();
+            }
+            if (k = 132)
+            {
+                do c.move_right();
+            }
+            if(k = 32)
+            {
+                let x_ammo = c.return_x() - 16;
+                let y_ammo = c.return_y();
+                do f.fire_new(x_ammo,y_ammo);
+            }
+
+            do f.fire_update();
+            do Sys.wait(100);
+        }
+
+        
+        return;
+    }
+}
