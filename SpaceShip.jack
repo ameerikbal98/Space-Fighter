@@ -2,11 +2,15 @@ class SpaceShip
 {
     field int x,y;
     field int loc;
-    constructor SpaceShip new(int Ax,int Ay)
+
+    field int y_bound_left,y_bound_right;
+    constructor SpaceShip new(int Ax,int Ay,int ybl,int ybr)
     {
         let x = Ax;
         let y = Ay;
         let loc = ((x * 32) + y);
+        let y_bound_left = ybl;
+        let y_bound_right = ybr;
         return this;
     }
 
@@ -25,9 +29,9 @@ class SpaceShip
     method void move_left()
     {
         let y = y-1;
-        if(y < 0)
+        if(y = y_bound_left)
         {
-            let y = 0;
+            let y = y + 1;
             return;
         }
         do clear();
@@ -41,9 +45,9 @@ class SpaceShip
     method void move_right()
     {
         let y = y+1;
-        if(y > 31)
+        if(y = y_bound_right)
         {
-            let y = 31;
+            let y = y - 1;
             return;
         }
         do clear();

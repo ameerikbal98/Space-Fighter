@@ -7,12 +7,19 @@ class Main
 
         var int x_ammo,y_ammo;
         var FireArm f;
+        var int y_bound_add_left,y_bound_add_right;
 
-        let c = SpaceShip.new(239,24);
+        do Screen.drawLine(127,0,127,256);
+        do Screen.drawLine(384,0,384,256);
 
-        let f = FireArm.new(5);
+        let y_bound_add_left = 127/16; // calculates y axis address bounds.
+        let y_bound_add_right = 384/16;
 
-        //do Screen.drawLine(128,0,128,256);
+        let c = SpaceShip.new(239,16,y_bound_add_left,y_bound_add_right);
+
+        let f = FireArm.new(10); 
+
+        
         do c.draw();
         while(true)
         {
@@ -30,7 +37,7 @@ class Main
             {
                 let x_ammo = c.return_x() - 16;
                 let y_ammo = c.return_y();
-                do f.fire_new(x_ammo,y_ammo);
+                do f.trigger(x_ammo,y_ammo);
             }
 
             do f.fire_update();

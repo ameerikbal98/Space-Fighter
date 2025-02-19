@@ -1,0 +1,102 @@
+class Ammo
+{
+    field Array x_cord;
+    field Array y_cord;
+    field int loadingtimer;
+    field int catridge_size;
+    field int current_bullet;
+    field int bullet_fin;
+
+    constructor Ammo new(int sz)
+    {
+        let x_cord = Array.new(sz);
+        let y_cord = Array.new(sz);
+        let catridge_size = sz;
+        let current_bullet = 0;
+        let bullet_fin = 0;
+        return this;
+
+    }
+
+    method int fire(int Ax,int Ay) //fires a new bullet at the given cordinate
+    {
+        var int i;
+        var int ret;
+        var int loc;
+
+        let i = 0;
+
+        if(current_bullet = catridge_size)
+        {
+            let ret = 0; // return value zero means needs to reload before using the catridge again
+        }
+
+        else
+        {
+            let x_cord[current_bullet] = Ax;
+            let y_cord[current_bullet] = Ay; 
+            let loc = ((Ax * 32 ) + Ay);
+            do Graphics.draw_ammo(loc);
+            let current_bullet = current_bullet + 1;
+            let ret = 1;
+        }
+
+        return ret; // return value 1 means bullet fired successfully or 0 means catridge finished.
+    }
+
+    method void draw_update()
+    {
+        var int i;
+        var int loc;
+        let i = 0;
+
+        while(i < current_bullet & ~(bullet_fin = catridge_size))
+        {
+
+            if(~(x_cord[i] = 0)) // checks whether the ammo is not in use or not.
+            {
+                let loc = (((x_cord[i]) * 32 ) + y_cord[i]);
+
+                do Graphics.clear_ammo(loc);
+                let x_cord[i] = x_cord[i] - 5;
+            }
+            
+            
+
+            if(x_cord[i] > 0)
+            {
+                let loc = (((x_cord[i]) * 32 ) + y_cord[i]);
+                do Graphics.draw_ammo(loc);
+            }
+            else
+            {
+                if(x_cord[i] < 0)
+                {
+                    let bullet_fin = bullet_fin + 1; //stores how many of the bullet is finished rendering
+                    let x_cord[i] = 0; // 0 signifies ammo no longer in use.
+                }
+
+                
+            }
+            let i = i + 1;
+        }
+
+        if(bullet_fin = catridge_size)
+        {
+            do refill();
+        }
+
+        return;
+    }
+
+    method void refill()
+    {
+        let current_bullet = 0;
+        let bullet_fin = 0;
+        return;
+    }
+
+
+
+
+}

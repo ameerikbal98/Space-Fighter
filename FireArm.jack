@@ -1,71 +1,29 @@
 class FireArm
 {
-    field int x,y;
-    field int typel;
-    field Array x_vals,y_vals;
-    field Array locations;
-    field int max_ammo;
-    field int p;
-    constructor FireArm new(int num)
+    field Ammo A1;
+
+    constructor FireArm new(int val)
     {
-        let locations = Array.new(num);
-        let x_vals = Array.new(num);
-        let y_vals = Array.new(num);
-        let max_ammo = num;
-        let p = 0;
+        let A1 = Ammo.new(val);
         return this;
 
     }
 
-    method void fire_new(int Ax,int Ay)
-    {
-        var int loc;
-        if( p < max_ammo)
-        {
-            
-            let loc = ((Ax * 32) + Ay);
-            let locations[p] = loc;
-            let x_vals[p] = Ax;
-            let y_vals[p] = Ay; 
-            do Graphics.draw_ammo(loc);
-            let p = p + 1;
-            
-        }
 
-        return;
+    
+    method void trigger(int Ax,int Ay)
+    {
+        var int fire_or_not;
+
+        let fire_or_not = A1.fire(Ax,Ay);
         
 
-    }
-
-    function void remove_value(int i)
-    {
-        while(i < p)
-        {
-            let locations[i] = locations[i+1];
-            let x_vals[i] = x_vals[i+1];
-            let y_vals[i] = y_vals[i+1];
-            let i = i + 1;
-        }
         return;
     }
 
     method void fire_update()
     {
-        var int i;
-
-        let i = 0;
-
-        while(i < p)
-        {
-            let x_vals[i] = x_vals[i] - 2;
-
-            do Graphics.clear_ammo(locations[i]);
-
-            let locations[i] = (((x_vals[i]) * 32 ) + y_vals[i]);
-
-            do Graphics.draw_ammo(locations[i]);
-            let i = i + 1;
-        }
+        do A1.draw_update();
 
         return;
     }
