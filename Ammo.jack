@@ -6,42 +6,41 @@ class Ammo
     field int catridge_size;
     field int current_bullet;
     field int bullet_fin;
+    field int x_ammo_stat,y_ammo_stat;//stores the address of last drawn ammo status symbol
 
     constructor Ammo new(int sz)
     {
+
         let x_cord = Array.new(sz);
         let y_cord = Array.new(sz);
         let catridge_size = sz;
         let current_bullet = 0;
         let bullet_fin = 0;
+        do draw_ammo_status_gfx(sz);
+        
+
         return this;
 
     }
 
-    method int fire(int Ax,int Ay) //fires a new bullet at the given cordinate
+    method void fire(int Ax,int Ay) //fires a new bullet at the given cordinate
     {
         var int i;
-        var int ret;
         var int loc;
 
         let i = 0;
 
-        if(current_bullet = catridge_size)
-        {
-            let ret = 0; // return value zero means needs to reload before using the catridge again
-        }
-
-        else
+        if(~(current_bullet = catridge_size))
         {
             let x_cord[current_bullet] = Ax;
             let y_cord[current_bullet] = Ay; 
             let loc = ((Ax * 32 ) + Ay);
             do Graphics.draw_ammo(loc);
             let current_bullet = current_bullet + 1;
-            let ret = 1;
+            do clear_last_ammo_gfx();
         }
 
-        return ret; // return value 1 means bullet fired successfully or 0 means catridge finished.
+        return; // return value 1 means bullet fired successfully or 0 means catridge finished.
     }
 
     method void draw_update()
@@ -93,10 +92,53 @@ class Ammo
     {
         let current_bullet = 0;
         let bullet_fin = 0;
+        do draw_ammo_status_gfx(catridge_size);
         return;
     }
 
+    method void draw_ammo_status_gfx(int n)
+    {
+        var int i;
+        var int loc;
+        let i = 0;
+        let x_ammo_stat = 2;
+        let y_ammo_stat = 0;
+        
 
+        while(i < n)
+        {
+            let loc = ((x_ammo_stat*32)+y_ammo_stat);
+            do Graphics.ammo_status_draw(loc);
+            let y_ammo_stat = y_ammo_stat + 1;
+            let i = i + 1;
+            if(y_ammo_stat = 5)
+            {
+                let x_ammo_stat = x_ammo_stat + 10;
+                let y_ammo_stat = 0;
+            }
+        }
 
+        let x_ammo_stat = x_ammo_stat - 10;
+        let y_ammo_stat = 4;
+        return;
+    }
+
+    method void clear_last_ammo_gfx()
+    {
+    
+        var int loc;
+
+        let loc = ((x_ammo_stat * 32) + y_ammo_stat);
+        do Graphics.ammo_status_clear(loc);
+        if(y_ammo_stat = 0)
+        {
+            let y_ammo_stat = 5;
+            let x_ammo_stat = x_ammo_stat - 10;
+        }
+        let y_ammo_stat = y_ammo_stat - 1;
+        return;
+    }
 
 }
+    
+

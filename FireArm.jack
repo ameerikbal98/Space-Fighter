@@ -13,9 +13,7 @@ class FireArm
     
     method void trigger(int Ax,int Ay)
     {
-        var int fire_or_not;
-
-        let fire_or_not = A1.fire(Ax,Ay);
+        do A1.fire(Ax,Ay);
         
 
         return;
