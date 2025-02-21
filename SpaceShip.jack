@@ -2,6 +2,7 @@ class SpaceShip
 {
     field int x,y;
     field int loc;
+    field Ammo A;
 
     field int y_bound_left,y_bound_right;
     constructor SpaceShip new(int Ax,int Ay,int ybl,int ybr)
@@ -11,6 +12,7 @@ class SpaceShip
         let loc = ((x * 32) + y);
         let y_bound_left = ybl;
         let y_bound_right = ybr;
+        let A = Ammo.new(20);
         return this;
     }
 
@@ -55,6 +57,21 @@ class SpaceShip
         let loc = ((x * 32) + y);
 
         do draw();
+        return;
+    }
+
+
+    method void trigger(int Ax,int Ay)
+    {
+        do A.fire(Ax,Ay);
+    
+        return;
+    }
+
+    method void fire_update()
+    {
+        do A.draw_update();
+
         return;
     }
 

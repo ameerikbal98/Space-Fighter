@@ -148,4 +148,36 @@ class Graphics
         return;
     }
 
+    function void Enemy_draw(int location) 
+    {
+        var int memAddress; 
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, 272);
+        do Memory.poke(memAddress +32, 4094);
+        do Memory.poke(memAddress +64, 2044);
+        do Memory.poke(memAddress +96, 2044);
+        do Memory.poke(memAddress +128, 1016);
+        do Memory.poke(memAddress +160, 496);
+        do Memory.poke(memAddress +192, 224);
+        do Memory.poke(memAddress +224, 64);
+        return;
+    }
+
+    function void Enemy_clear(int location) 
+    {
+        var int memAddress; 
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, 0);
+        do Memory.poke(memAddress +32, 0);
+        do Memory.poke(memAddress +64, 0);
+        do Memory.poke(memAddress +96, 0);
+        do Memory.poke(memAddress +128, 0);
+        do Memory.poke(memAddress +160, 0);
+        do Memory.poke(memAddress +192, 0);
+        do Memory.poke(memAddress +224, 0);
+        return;
+    }
+
 }

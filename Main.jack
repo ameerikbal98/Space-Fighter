@@ -2,12 +2,17 @@ class Main
 {
     function void main()
     {
-        var SpaceShip c;
+        var SpaceShip ss;
         var int k;
 
         var int x_ammo,y_ammo;
-        var FireArm f;
         var int y_bound_add_left,y_bound_add_right;
+
+        var Enemy e;
+        var int max_enemy;
+
+
+        var int z;
 
         do Screen.drawLine(127,0,127,256);
         do Screen.drawLine(384,0,384,256);
@@ -15,32 +20,41 @@ class Main
         let y_bound_add_left = 127/16; // calculates y axis address bounds.
         let y_bound_add_right = 384/16;
 
-        let c = SpaceShip.new(239,16,y_bound_add_left,y_bound_add_right);
+        let ss = SpaceShip.new(239,16,y_bound_add_left,y_bound_add_right);
 
-        let f = FireArm.new(10); 
+        let max_enemy = 5;
+
+        let e = Enemy.new(y_bound_add_left,y_bound_add_right,max_enemy);
+
+        let z = 0;
 
         
-        do c.draw();
+        
+
+        
+        do ss.draw(); // draw the intial  space ship
         while(true)
         {
             
             let k = Keyboard.keyPressed();
+            do e.create_new();
             if(k = 130)
             {
-                do c.move_left();
+                do ss.move_left();
             }
             if (k = 132)
             {
-                do c.move_right();
+                do ss.move_right();
             }
             if(k = 32)
             {
-                let x_ammo = c.return_x() - 16;
-                let y_ammo = c.return_y();
-                do f.trigger(x_ammo,y_ammo);
+                let x_ammo = ss.return_x() - 16;
+                let y_ammo = ss.return_y();
+                do ss.trigger(x_ammo,y_ammo);
             }
-
-            do f.fire_update();
+            
+            do ss.fire_update();
+            do e.update_enemy();
             do Sys.wait(100);
         }
 

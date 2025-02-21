@@ -1,0 +1,32 @@
+//implementation of Lehmer's algorithm for random number generation..
+
+class Random
+{
+    field int a, seed, m, r;
+
+    constructor Random new(int s,int con)
+    {
+        let a = con;
+        let seed = s;
+        let r = seed;
+        let m = 32767; //largest prime number that can be stored in a 16 bit 2's complement method.
+        return this;
+    }
+
+    method int generate() //this function generate a random number each time
+    {
+
+        let r = Random.mod(r*a,m);
+        return r;
+
+    }
+
+    function int mod(int a, int b) // generates mod of two numbers
+    {
+        var int r;
+
+        let r = (a - (b * (a / b)));
+
+        return r;
+    }
+}

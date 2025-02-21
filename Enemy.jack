@@ -1,0 +1,80 @@
+class Enemy
+{
+    field int y_boundary_left,y_boundary_right;
+    field Array x_cord;
+    field Array y_cord;
+    field int diff;
+    field Random r;
+    field int current_enemy;
+    field int total_enemy;
+    field int speed; //speed at which enemy moves
+
+    constructor Enemy new(int ybl,int ybr,int num)
+    {
+        let y_boundary_left = ybl;
+        let y_boundary_right = ybr;
+        let r = Random.new(3,5);
+        let diff = ybr - ybl;
+
+        let x_cord = Array.new(num);
+        let y_cord = Array.new(num);
+        let total_enemy = num;
+        let current_enemy = 0;
+        let speed = 1;
+        return this;
+    }
+
+    method void create_new()
+    {
+        var int m;
+        var int rv;
+        var int loc;
+
+        if(current_enemy < total_enemy)
+        {
+            let rv = r.generate();
+            let m = Random.mod(rv,diff);
+            if(m = 0)
+            {
+                let m = m + 2;
+            }
+
+            if(m = 1)
+            {
+                let m = m + 1;
+            }
+            let loc = y_boundary_left + m;
+
+            let x_cord[current_enemy] = 0;
+            let y_cord[current_enemy] = loc;
+            let current_enemy = current_enemy + 1;
+            do Graphics.Enemy_draw(loc);
+        }
+        
+        return;
+    }
+
+    method void update_enemy()
+    {
+        var int i;
+        var int loc;
+
+        let i = 0;
+
+        while(i < current_enemy)
+        {
+
+            let loc = ((x_cord[i]*32) + y_cord[i]);
+            do Graphics.Enemy_clear(loc);
+            let x_cord[i] = x_cord[i] + speed;
+
+            let loc = ((x_cord[i] * 32) + y_cord[i]);
+
+            do Graphics.Enemy_draw(loc);
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+}
