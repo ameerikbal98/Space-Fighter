@@ -22,7 +22,7 @@ class Main
 
         let ss = SpaceShip.new(239,16,y_bound_add_left,y_bound_add_right);
 
-        let max_enemy = 5;
+        let max_enemy = 30;
 
         let e = Enemy.new(y_bound_add_left,y_bound_add_right,max_enemy);
 
@@ -37,7 +37,11 @@ class Main
         {
             
             let k = Keyboard.keyPressed();
-            do e.create_new();
+            if(Random.mod(z,20) = 0)
+            {
+                do e.create_new();
+            }
+            
             if(k = 130)
             {
                 do ss.move_left();
@@ -55,6 +59,7 @@ class Main
             
             do ss.fire_update();
             do e.update_enemy();
+            let z = z + 1;
             do Sys.wait(100);
         }
 

@@ -5,12 +5,13 @@ class Enemy
     field Array y_cord;
     field int diff;
     field Random r;
-    field int current_enemy;
     field int total_enemy;
+    field int enemy_left;
     field int speed; //speed at which enemy moves
 
     constructor Enemy new(int ybl,int ybr,int num)
     {
+        var int i;
         let y_boundary_left = ybl;
         let y_boundary_right = ybr;
         let r = Random.new(3,5);
@@ -19,8 +20,16 @@ class Enemy
         let x_cord = Array.new(num);
         let y_cord = Array.new(num);
         let total_enemy = num;
-        let current_enemy = 0;
+        let enemy_left = total_enemy;
         let speed = 1;
+        let i = 0;
+
+        while(i < total_enemy)
+        {
+            let x_cord[i] = -1;
+            let i = i + 1;
+        }
+        
         return this;
     }
 
@@ -29,26 +38,36 @@ class Enemy
         var int m;
         var int rv;
         var int loc;
+        var int i;
+        var int created;
 
-        if(current_enemy < total_enemy)
+        let created = 0;
+
+        let i = 0;
+        while(i < total_enemy & created = 0 & (enemy_left > 0))
         {
-            let rv = r.generate();
-            let m = Random.mod(rv,diff);
-            if(m = 0)
+            if(x_cord[i] = -1)
             {
-                let m = m + 2;
-            }
+                let rv = r.generate(); //generate a random number
+                let m = Random.mod(rv,diff); //find the mod between the random number and the screen length. so that new enemies comes in a random place on the screen.
+                if(m = 0)
+                {
+                    let m = m + 2;
+                }
 
-            if(m = 1)
-            {
-                let m = m + 1;
-            }
-            let loc = y_boundary_left + m;
+                if(m = 1)
+                {
+                    let m = m + 1;
+                }
+                let loc = y_boundary_left + m; //add the random number to the left boundary limit.
 
-            let x_cord[current_enemy] = 0;
-            let y_cord[current_enemy] = loc;
-            let current_enemy = current_enemy + 1;
-            do Graphics.Enemy_draw(loc);
+                let x_cord[i] = 0;
+                let y_cord[i] = loc;
+                let enemy_left = enemy_left - 1;
+                do Graphics.Enemy_draw(loc);
+                let created  = 1;
+            }
+            let i = i + 1;
         }
         
         return;
@@ -60,17 +79,29 @@ class Enemy
         var int loc;
 
         let i = 0;
-
-        while(i < current_enemy)
+        while(i < total_enemy & ~(x_cord[i] = -1))
         {
+            if(x_cord[i] < 256) //Checks if the enemy went past the screen or not
+            {
 
-            let loc = ((x_cord[i]*32) + y_cord[i]);
-            do Graphics.Enemy_clear(loc);
-            let x_cord[i] = x_cord[i] + speed;
+                let loc = ((x_cord[i]*32) + y_cord[i]);
+                do Graphics.Enemy_clear(loc);
 
-            let loc = ((x_cord[i] * 32) + y_cord[i]);
+                let x_cord[i] = x_cord[i] + speed;
 
-            do Graphics.Enemy_draw(loc);
+                let loc = ((x_cord[i] * 32) + y_cord[i]);
+
+                do Graphics.Enemy_draw(loc);
+                
+            }
+            else
+            {
+                let loc = ((x_cord[i]*32) + y_cord[i]);
+                do Graphics.Enemy_clear(loc);
+                let x_cord[i] = -1;
+                let enemy_left = enemy_left + 1;
+
+            }
             let i = i + 1;
         }
 
