@@ -1,3 +1,8 @@
+//controls and game rules
+//press left key to move left and right key to move right
+//press space to shoot
+//miss 5 enemies and you lose
+
 class Main
 {
     function void main()
@@ -10,9 +15,12 @@ class Main
 
         var Enemy e;
         var int max_enemy;
+        var int enemy_creation_cycle;
 
 
         var int z;
+
+        var int score;
 
         do Screen.drawLine(127,0,127,256);
         do Screen.drawLine(384,0,384,256);
@@ -22,22 +30,26 @@ class Main
 
         let ss = SpaceShip.new(239,16,y_bound_add_left,y_bound_add_right);
 
-        let max_enemy = 30;
+        let max_enemy = 100;
 
         let e = Enemy.new(y_bound_add_left,y_bound_add_right,max_enemy);
 
         let z = 0;
 
-        
-        
+        let enemy_creation_cycle = 20;
 
         
+        do Output.moveCursor(5,1);
+
+        do Output.printString("Score:");
         do ss.draw(); // draw the intial  space ship
-        while(true)
+        while(~(e.game_over()))
         {
+
+            do Output.printInt(e.return_enemy_kill());
             
             let k = Keyboard.keyPressed();
-            if(Random.mod(z,20) = 0)
+            if(Random.mod(z,enemy_creation_cycle) = 0)
             {
                 do e.create_new();
             }
@@ -57,11 +69,19 @@ class Main
                 do ss.trigger(x_ammo,y_ammo);
             }
             
-            do ss.fire_update();
-            do e.update_enemy();
+            
+            do e.update_enemy(); //updates the position of enemy
+            do ss.fire_update(e); // update the position of bullet
             let z = z + 1;
             do Sys.wait(100);
+            do Output.moveCursor(5,7);
         }
+
+
+        do Output.printInt(e.return_enemy_kill());
+        do Output.moveCursor(6,1);
+
+        do Output.printString("Game Over");
 
         
         return;

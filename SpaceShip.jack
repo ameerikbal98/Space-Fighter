@@ -68,9 +68,9 @@ class SpaceShip
         return;
     }
 
-    method void fire_update()
+    method void fire_update(Enemy e)
     {
-        do A.draw_update();
+        do A.draw_update(e);
 
         return;
     }
@@ -85,4 +85,5 @@ class SpaceShip
         return x;
     }
 
+    
 }

@@ -8,6 +8,9 @@ class Enemy
     field int total_enemy;
     field int enemy_left;
     field int speed; //speed at which enemy moves
+    field int empty_val;
+    field int enemy_kill_count;
+    field int enemy_escaped;
 
     constructor Enemy new(int ybl,int ybr,int num)
     {
@@ -16,6 +19,7 @@ class Enemy
         let y_boundary_right = ybr;
         let r = Random.new(3,5);
         let diff = ybr - ybl;
+        let empty_val = -1;
 
         let x_cord = Array.new(num);
         let y_cord = Array.new(num);
@@ -23,10 +27,12 @@ class Enemy
         let enemy_left = total_enemy;
         let speed = 1;
         let i = 0;
+        let enemy_kill_count = 0;
+        let enemy_escaped = 0;
 
         while(i < total_enemy)
         {
-            let x_cord[i] = -1;
+            let x_cord[i] = empty_val;
             let i = i + 1;
         }
         
@@ -46,7 +52,7 @@ class Enemy
         let i = 0;
         while(i < total_enemy & created = 0 & (enemy_left > 0))
         {
-            if(x_cord[i] = -1)
+            if(x_cord[i] = empty_val)
             {
                 let rv = r.generate(); //generate a random number
                 let m = Random.mod(rv,diff); //find the mod between the random number and the screen length. so that new enemies comes in a random place on the screen.
@@ -65,7 +71,7 @@ class Enemy
                 let y_cord[i] = loc;
                 let enemy_left = enemy_left - 1;
                 do Graphics.Enemy_draw(loc);
-                let created  = 1;
+                let created  = 1; 
             }
             let i = i + 1;
         }
@@ -94,11 +100,12 @@ class Enemy
                 do Graphics.Enemy_draw(loc);
                 
             }
-            else
+            else //went past the screen
             {
+                let enemy_escaped = enemy_escaped + 1;
                 let loc = ((x_cord[i]*32) + y_cord[i]);
                 do Graphics.Enemy_clear(loc);
-                let x_cord[i] = -1;
+                let x_cord[i] = empty_val;
                 let enemy_left = enemy_left + 1;
 
             }
@@ -107,5 +114,101 @@ class Enemy
 
         return;
     }
+
+    method void increase_speed()
+    {
+        let speed = speed + 1;
+        return;
+    }
+
+    method int return_maxenemy()
+    {
+        return total_enemy;
+    }
+
+    method void empty_pos(int i) //kills the enemy at position i
+    {
+        var int loc;
+        let loc = ((x_cord[i]*32) + y_cord[i]);
+        do Graphics.Enemy_clear(loc);
+        let x_cord[i] = empty_val;
+        let enemy_left = enemy_left + 1;
+        return;
+    }
+    
+    method int return_enemy_kill()
+    {
+        return enemy_kill_count;
+    }
+
+    method int game_over()
+    {
+        var int flag;
+        let flag = 0;
+
+        if(enemy_escaped = 5)
+        {
+            let flag = 1;
+        }
+
+        return flag;
+    }
+
+    method int check_hit(int loc_ammo) // check if there is any hit with the enemy;
+    {
+        var int i;
+        var int loc_enemy;
+        var int flag;
+        var int and_value;
+
+        let flag = 0;
+        let i = 0;
+
+        while(i < total_enemy & (flag = 0))
+        {
+            let loc_enemy = ((x_cord[i] * 32) + y_cord[i]);
+            if(loc_ammo = loc_enemy)
+            {
+                let flag = 1;
+            }
+            if(loc_ammo = (loc_enemy + 32))
+            {
+                let flag = 1;
+            }
+            if(loc_ammo = (loc_enemy + 64))
+            {
+                let flag = 1;
+            }
+            if(loc_ammo = (loc_enemy + 96))
+            {
+                let flag = 1;
+            }
+            if(loc_ammo = (loc_enemy + 128))
+            {
+                let flag = 1;
+            }
+            if(loc_ammo = (loc_enemy + 160))
+            {
+                let flag = 1;
+            }
+            if(loc_ammo = (loc_enemy + 192))
+            {
+                let flag = 1;
+            }
+            if(loc_ammo = (loc_enemy + 224))
+            {
+                let flag = 1;
+            }
+            let i = i + 1;
+        }
+        if(flag = 1)
+        {
+            let i = i - 1;
+            do empty_pos(i);
+            let enemy_kill_count = enemy_kill_count + 1;
+        }
+        return flag;
+    }
+
 
 }

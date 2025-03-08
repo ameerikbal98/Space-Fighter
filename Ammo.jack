@@ -43,10 +43,11 @@ class Ammo
         return; // return value 1 means bullet fired successfully or 0 means catridge finished.
     }
 
-    method void draw_update()
+    method void draw_update(Enemy e)
     {
         var int i;
         var int loc;
+        var int enemy_hit;
         let i = 0;
 
         while(i < current_bullet & ~(bullet_fin = catridge_size))
@@ -65,7 +66,17 @@ class Ammo
             if(x_cord[i] > 0)
             {
                 let loc = (((x_cord[i]) * 32 ) + y_cord[i]);
-                do Graphics.draw_ammo(loc);
+                let enemy_hit = e.check_hit(loc);
+                if(enemy_hit = 1)
+                {
+                    let bullet_fin = bullet_fin + 1; //stores how many of the bullet is finished rendering
+                    let x_cord[i] = 0; // 0 signifies ammo no longer in use.
+                }
+                else
+                {
+                    do Graphics.draw_ammo(loc);
+                }
+                
             }
             else
             {
@@ -96,7 +107,7 @@ class Ammo
         return;
     }
 
-    method void draw_ammo_status_gfx(int n)
+    method void draw_ammo_status_gfx(int n) //draws the remaining ammo you have in the ship
     {
         var int i;
         var int loc;
